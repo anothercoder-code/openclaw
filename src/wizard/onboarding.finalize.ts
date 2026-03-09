@@ -63,7 +63,7 @@ export async function finalizeOnboardingWizard(
     }
   };
 
-  if (process.platform === "linux") {
+  if (process.platform === "linux" && opts.installDaemon !== true) {
     await prompter.note(
       "Linux 平台已移除内置开机自启安装，仅保留 macOS 与 Windows。",
       "Gateway service",
@@ -73,10 +73,10 @@ export async function finalizeOnboardingWizard(
   const explicitInstallDaemon =
     typeof opts.installDaemon === "boolean" ? opts.installDaemon : undefined;
   let installDaemon: boolean;
-  if (process.platform === "linux") {
-    installDaemon = false;
-  } else if (explicitInstallDaemon !== undefined) {
+  if (explicitInstallDaemon !== undefined) {
     installDaemon = explicitInstallDaemon;
+  } else if (process.platform === "linux") {
+    installDaemon = false;
   } else if (flow === "quickstart") {
     installDaemon = true;
   } else {
