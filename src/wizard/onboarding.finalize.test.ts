@@ -122,7 +122,7 @@ describe("finalizeOnboardingWizard", () => {
     const previous = process.env.OPENCLAW_GATEWAY_PASSWORD;
     process.env.OPENCLAW_GATEWAY_PASSWORD = "resolved-gateway-password"; // pragma: allowlist secret
     const select = vi.fn(async (params: { message: string }) => {
-      if (params.message === "How do you want to hatch your bot?") {
+      if (params.message === "你希望如何启动你的助手？") {
         return "tui";
       }
       return "later";
@@ -195,6 +195,57 @@ describe("finalizeOnboardingWizard", () => {
         password: "resolved-gateway-password", // pragma: allowlist secret
       }),
     );
+  });
+
+  it("honors explicit daemon install flag on Linux", async () => {
+    const platformSpy = vi.spyOn(process, "platform", "get").mockReturnValue("linux");
+    const prompter = buildWizardPrompter({
+      select: vi.fn(async () => "node") as never,
+      confirm: vi.fn(async () => false),
+    });
+
+    try {
+      await finalizeOnboardingWizard({
+        flow: "advanced",
+        opts: {
+          acceptRisk: true,
+          authChoice: "skip",
+          installDaemon: true,
+          skipHealth: true,
+          skipUi: true,
+        },
+        baseConfig: {},
+        nextConfig: {
+          gateway: {
+            auth: {
+              mode: "token",
+              token: {
+                source: "env",
+                provider: "default",
+                id: "OPENCLAW_GATEWAY_TOKEN",
+              },
+            },
+          },
+        },
+        workspaceDir: "/tmp",
+        settings: {
+          port: 18789,
+          bind: "loopback",
+          authMode: "token",
+          gatewayToken: "session-token",
+          tailscaleMode: "off",
+          tailscaleResetOnExit: false,
+        },
+        prompter,
+        runtime: createRuntime(),
+      });
+    } finally {
+      platformSpy.mockRestore();
+    }
+
+    expect(resolveGatewayInstallToken).toHaveBeenCalledTimes(1);
+    expect(buildGatewayInstallPlan).toHaveBeenCalledTimes(1);
+    expect(gatewayServiceInstall).toHaveBeenCalledTimes(1);
   });
 
   it("does not persist resolved SecretRef token in daemon install plan", async () => {

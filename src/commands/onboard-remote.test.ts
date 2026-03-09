@@ -92,9 +92,9 @@ describe("promptRemoteGatewayConfig", () => {
       text,
       confirm: true,
       selectResponses: {
-        "Select gateway": "0",
+        选择网关: "0",
         "Connection method": "direct",
-        "Gateway auth": "token",
+        "Gateway 认证方式": "token",
       },
     });
 
@@ -124,7 +124,7 @@ describe("promptRemoteGatewayConfig", () => {
     const { next } = await runRemotePrompt({
       text,
       confirm: false,
-      selectResponses: { "Gateway auth": "off" },
+      selectResponses: { "Gateway 认证方式": "off" },
     });
 
     expect(next.gateway?.mode).toBe("remote");
@@ -146,7 +146,7 @@ describe("promptRemoteGatewayConfig", () => {
     const { next } = await runRemotePrompt({
       text,
       confirm: false,
-      selectResponses: { "Gateway auth": "off" },
+      selectResponses: { "Gateway 认证方式": "off" },
     });
 
     expect(next.gateway?.mode).toBe("remote");
@@ -166,13 +166,13 @@ describe("promptRemoteGatewayConfig", () => {
     }) as WizardPrompter["text"];
 
     const select: WizardPrompter["select"] = vi.fn(async (params) => {
-      if (params.message === "Gateway auth") {
+      if (params.message === "Gateway 认证方式") {
         return "token" as never;
       }
-      if (params.message === "How do you want to provide this gateway token?") {
+      if (params.message === "你希望如何提供这个 Gateway 令牌？") {
         return "ref" as never;
       }
-      if (params.message === "Where is this gateway token stored?") {
+      if (params.message === "这个 Gateway 令牌存放在哪里？") {
         return "env" as never;
       }
       return (params.options[0]?.value ?? "") as never;

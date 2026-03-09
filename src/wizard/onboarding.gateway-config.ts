@@ -61,9 +61,9 @@ export async function configureGatewayForOnboarding(
       : Number.parseInt(
           String(
             await prompter.text({
-              message: "Gateway port",
+              message: "Gateway 端口",
               initialValue: String(localPort),
-              validate: (value) => (Number.isFinite(Number(value)) ? undefined : "Invalid port"),
+              validate: (value) => (Number.isFinite(Number(value)) ? undefined : "端口无效"),
             }),
           ),
           10,
@@ -73,13 +73,13 @@ export async function configureGatewayForOnboarding(
     flow === "quickstart"
       ? quickstartGateway.bind
       : await prompter.select<GatewayWizardSettings["bind"]>({
-          message: "Gateway bind",
+          message: "Gateway 绑定地址",
           options: [
-            { value: "loopback", label: "Loopback (127.0.0.1)" },
-            { value: "lan", label: "LAN (0.0.0.0)" },
+            { value: "loopback", label: "回环地址（127.0.0.1）" },
+            { value: "lan", label: "局域网（0.0.0.0）" },
             { value: "tailnet", label: "Tailnet (Tailscale IP)" },
-            { value: "auto", label: "Auto (Loopback → LAN)" },
-            { value: "custom", label: "Custom IP" },
+            { value: "auto", label: "自动（回环 → 局域网）" },
+            { value: "custom", label: "自定义 IP" },
           ],
         });
 
@@ -88,7 +88,7 @@ export async function configureGatewayForOnboarding(
     const needsPrompt = flow !== "quickstart" || !customBindHost;
     if (needsPrompt) {
       const input = await prompter.text({
-        message: "Custom IP address",
+        message: "自定义 IP 地址",
         placeholder: "192.168.1.100",
         initialValue: customBindHost ?? "",
         validate: validateIPv4AddressInput,
@@ -101,14 +101,14 @@ export async function configureGatewayForOnboarding(
     flow === "quickstart"
       ? quickstartGateway.authMode
       : ((await prompter.select({
-          message: "Gateway auth",
+          message: "Gateway 认证方式",
           options: [
             {
               value: "token",
-              label: "Token",
-              hint: "Recommended default (local + remote)",
+              label: "令牌",
+              hint: "推荐默认（本地与远程都适用）",
             },
-            { value: "password", label: "Password" },
+            { value: "password", label: "密码" },
           ],
           initialValue: "token",
         })) as GatewayAuthChoice);
@@ -117,7 +117,7 @@ export async function configureGatewayForOnboarding(
     flow === "quickstart"
       ? quickstartGateway.tailscaleMode
       : await prompter.select<GatewayWizardSettings["tailscaleMode"]>({
-          message: "Tailscale exposure",
+          message: "Tailscale 暴露方式",
           options: [...TAILSCALE_EXPOSURE_OPTIONS],
         });
 
@@ -127,7 +127,7 @@ export async function configureGatewayForOnboarding(
   if (tailscaleMode !== "off") {
     tailscaleBin = await findTailscaleBinary();
     if (!tailscaleBin) {
-      await prompter.note(TAILSCALE_MISSING_BIN_NOTE_LINES.join("\n"), "Tailscale Warning");
+      await prompter.note(TAILSCALE_MISSING_BIN_NOTE_LINES.join("\n"), "Tailscale 警告");
     }
   }
 
@@ -136,7 +136,7 @@ export async function configureGatewayForOnboarding(
     await prompter.note(TAILSCALE_DOCS_LINES.join("\n"), "Tailscale");
     tailscaleResetOnExit = Boolean(
       await prompter.confirm({
-        message: "Reset Tailscale serve/funnel on exit?",
+        message: "退出时是否重置 Tailscale serve/funnel？",
         initialValue: false,
       }),
     );
@@ -146,13 +146,13 @@ export async function configureGatewayForOnboarding(
   // - Tailscale wants bind=loopback so we never expose a non-loopback server + tailscale serve/funnel at once.
   // - Funnel requires password auth.
   if (tailscaleMode !== "off" && bind !== "loopback") {
-    await prompter.note("Tailscale requires bind=loopback. Adjusting bind to loopback.", "Note");
+    await prompter.note("Tailscale 要求 bind=loopback，已自动调整为 loopback。", "提示");
     bind = "loopback";
     customBindHost = undefined;
   }
 
   if (tailscaleMode === "funnel" && authMode !== "password") {
-    await prompter.note("Tailscale funnel requires password auth.", "Note");
+    await prompter.note("Tailscale funnel 需要使用密码认证。", "提示");
     authMode = "password";
   }
 
@@ -173,11 +173,11 @@ export async function configureGatewayForOnboarding(
             prompter,
             explicitMode: opts.secretInputMode,
             copy: {
-              modeMessage: "How do you want to provide the gateway token?",
-              plaintextLabel: "Generate/store plaintext token",
-              plaintextHint: "Default",
-              refLabel: "Use SecretRef",
-              refHint: "Store a reference instead of plaintext",
+              modeMessage: "你希望如何提供 Gateway 令牌？",
+              plaintextLabel: "生成并保存明文令牌",
+              plaintextHint: "默认",
+              refLabel: "使用 SecretRef",
+              refHint: "保存引用而不是明文",
             },
           });
     if (tokenMode === "ref") {
@@ -196,7 +196,7 @@ export async function configureGatewayForOnboarding(
           prompter,
           preferredEnvVar: "OPENCLAW_GATEWAY_TOKEN",
           copy: {
-            sourceMessage: "Where is this gateway token stored?",
+            sourceMessage: "这个 Gateway 令牌存放在哪里？",
             envVarPlaceholder: "OPENCLAW_GATEWAY_TOKEN",
           },
         });
@@ -210,8 +210,8 @@ export async function configureGatewayForOnboarding(
       gatewayTokenInput = gatewayToken;
     } else {
       const tokenInput = await prompter.text({
-        message: "Gateway token (blank to generate)",
-        placeholder: "Needed for multi-machine or non-loopback access",
+        message: "Gateway 令牌（留空自动生成）",
+        placeholder: "多设备或非回环访问时需要",
         initialValue:
           quickstartTokenString ??
           normalizeGatewayTokenInput(process.env.OPENCLAW_GATEWAY_TOKEN) ??
@@ -230,9 +230,9 @@ export async function configureGatewayForOnboarding(
         prompter,
         explicitMode: opts.secretInputMode,
         copy: {
-          modeMessage: "How do you want to provide the gateway password?",
-          plaintextLabel: "Enter password now",
-          plaintextHint: "Stores the password directly in OpenClaw config",
+          modeMessage: "你希望如何提供 Gateway 密码？",
+          plaintextLabel: "现在输入密码",
+          plaintextHint: "将密码直接保存到 OpenClaw 配置中",
         },
       });
       if (selectedMode === "ref") {
@@ -242,7 +242,7 @@ export async function configureGatewayForOnboarding(
           prompter,
           preferredEnvVar: "OPENCLAW_GATEWAY_PASSWORD",
           copy: {
-            sourceMessage: "Where is this gateway password stored?",
+            sourceMessage: "这个 Gateway 密码存放在哪里？",
             envVarPlaceholder: "OPENCLAW_GATEWAY_PASSWORD",
           },
         });
@@ -250,7 +250,7 @@ export async function configureGatewayForOnboarding(
       } else {
         password = String(
           (await prompter.text({
-            message: "Gateway password",
+            message: "Gateway 密码",
             validate: validateGatewayPasswordInput,
           })) ?? "",
         ).trim();

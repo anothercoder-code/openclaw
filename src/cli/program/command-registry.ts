@@ -42,7 +42,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "setup",
-        description: "Initialize local config and agent workspace",
+        description: "初始化本地配置与 Agent 工作区",
         hasSubcommands: false,
       },
     ],
@@ -55,7 +55,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "onboard",
-        description: "Interactive onboarding wizard for gateway, workspace, and skills",
+        description: "交互式引导：配置网关、工作区与技能",
         hasSubcommands: false,
       },
     ],
@@ -68,8 +68,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "configure",
-        description:
-          "Interactive setup wizard for credentials, channels, gateway, and agent defaults",
+        description: "交互式配置向导：凭据、渠道、网关与 Agent 默认项",
         hasSubcommands: false,
       },
     ],
@@ -82,8 +81,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "config",
-        description:
-          "Non-interactive config helpers (get/set/unset/file/validate). Default: starts setup wizard.",
+        description: "非交互配置工具（get/set/unset/file/validate）；默认进入配置向导。",
         hasSubcommands: true,
       },
     ],
@@ -96,7 +94,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "backup",
-        description: "Create and verify local backup archives for OpenClaw state",
+        description: "创建并校验 OpenClaw 本地状态备份",
         hasSubcommands: true,
       },
     ],
@@ -109,22 +107,22 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "doctor",
-        description: "Health checks + quick fixes for the gateway and channels",
+        description: "网关与渠道健康检查及快速修复",
         hasSubcommands: false,
       },
       {
         name: "dashboard",
-        description: "Open the Control UI with your current token",
+        description: "使用当前令牌打开 Control UI",
         hasSubcommands: false,
       },
       {
         name: "reset",
-        description: "Reset local config/state (keeps the CLI installed)",
+        description: "重置本地配置/状态（保留 CLI）",
         hasSubcommands: false,
       },
       {
         name: "uninstall",
-        description: "Uninstall the gateway service + local data (CLI remains)",
+        description: "卸载网关服务与本地数据（保留 CLI）",
         hasSubcommands: false,
       },
     ],
@@ -137,7 +135,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "message",
-        description: "Send, read, and manage messages",
+        description: "发送、读取与管理消息",
         hasSubcommands: true,
       },
     ],
@@ -150,7 +148,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "memory",
-        description: "Search and reindex memory files",
+        description: "搜索并重建记忆文件索引",
         hasSubcommands: true,
       },
     ],
@@ -163,12 +161,12 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "agent",
-        description: "Run one agent turn via the Gateway",
+        description: "通过 Gateway 运行一次 Agent 对话",
         hasSubcommands: false,
       },
       {
         name: "agents",
-        description: "Manage isolated agents (workspaces, auth, routing)",
+        description: "管理隔离 Agent（工作区、认证、路由）",
         hasSubcommands: true,
       },
     ],
@@ -183,17 +181,17 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "status",
-        description: "Show channel health and recent session recipients",
+        description: "查看渠道健康状态与近期会话接收方",
         hasSubcommands: false,
       },
       {
         name: "health",
-        description: "Fetch health from the running gateway",
+        description: "从运行中的 Gateway 拉取健康状态",
         hasSubcommands: false,
       },
       {
         name: "sessions",
-        description: "List stored conversation sessions",
+        description: "列出已存储会话",
         hasSubcommands: true,
       },
     ],
@@ -206,7 +204,7 @@ const coreEntries: CoreCliEntry[] = [
     commands: [
       {
         name: "browser",
-        description: "Manage OpenClaw's dedicated browser (Chrome/Chromium)",
+        description: "管理 OpenClaw 专用浏览器（Chrome/Chromium）",
         hasSubcommands: true,
       },
     ],
