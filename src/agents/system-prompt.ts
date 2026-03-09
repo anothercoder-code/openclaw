@@ -628,7 +628,7 @@ export function buildAgentSystemPrompt(params: {
       lines.push("The following project context files have been loaded:");
       if (hasSoulFile) {
         lines.push(
-          "If SOUL.md is present, embody its persona and tone. Avoid stiff, generic replies; follow its guidance unless higher-priority instructions override it.",
+          "如果存在 SOUL.md，请体现其中的人设与语气。面对中文用户时，除非用户另有要求，默认使用自然中文表达。避免生硬、模板化回复；除非被更高优先级指令覆盖，否则遵循 SOUL.md。",
         );
       }
       lines.push("");

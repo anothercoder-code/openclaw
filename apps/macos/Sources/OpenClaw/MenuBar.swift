@@ -39,7 +39,10 @@ struct OpenClawApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra { MenuContent(state: self.state, updater: self.delegate.updaterController) } label: {
+        MenuBarExtra {
+            MenuContent(state: self.state, updater: self.delegate.updaterController)
+                .tint(AppPalette.accent)
+        } label: {
             CritterStatusLabel(
                 isPaused: self.state.isPaused,
                 isSleeping: self.isGatewaySleeping,
@@ -80,6 +83,7 @@ struct OpenClawApp: App {
 
         Settings {
             SettingsRootView(state: self.state, updater: self.delegate.updaterController)
+                .tint(AppPalette.accent)
                 .frame(width: SettingsTab.windowWidth, height: SettingsTab.windowHeight, alignment: .topLeading)
                 .environment(self.tailscaleService)
         }
