@@ -65,7 +65,7 @@ export async function promptRemoteGatewayConfig(
   const hasBonjourTool = (await detectBinary("dns-sd")) || (await detectBinary("avahi-browse"));
   const wantsDiscover = hasBonjourTool
     ? await prompter.confirm({
-        message: "Discover gateway on LAN (Bonjour)?",
+        message: "在局域网中发现网关（Bonjour）？",
         initialValue: true,
       })
     : false;
@@ -73,10 +73,10 @@ export async function promptRemoteGatewayConfig(
   if (!hasBonjourTool) {
     await prompter.note(
       [
-        "Bonjour discovery requires dns-sd (macOS) or avahi-browse (Linux).",
-        "Docs: https://docs.openclaw.ai/gateway/discovery",
+        "Bonjour 发现功能需要 dns-sd（macOS）或 avahi-browse（Linux）。",
+        "文档：https://docs.openclaw.ai/gateway/discovery",
       ].join("\n"),
-      "Discovery",
+      "发现",
     );
   }
 
@@ -86,17 +86,17 @@ export async function promptRemoteGatewayConfig(
     });
     const spin = prompter.progress("Searching for gateways…");
     const beacons = await discoverGatewayBeacons({ timeoutMs: 2000, wideAreaDomain });
-    spin.stop(beacons.length > 0 ? `Found ${beacons.length} gateway(s)` : "No gateways found");
+    spin.stop(beacons.length > 0 ? `已发现 ${beacons.length} 个网关` : "未发现网关");
 
     if (beacons.length > 0) {
       const selection = await prompter.select({
-        message: "Select gateway",
+        message: "选择网关",
         options: [
           ...beacons.map((beacon, index) => ({
             value: String(index),
             label: buildLabel(beacon),
           })),
-          { value: "manual", label: "Enter URL manually" },
+          { value: "manual", label: "手动输入 URL" },
         ],
       });
       if (selection !== "manual") {
@@ -154,11 +154,11 @@ export async function promptRemoteGatewayConfig(
   const url = ensureWsUrl(String(urlInput));
 
   const authChoice = await prompter.select({
-    message: "Gateway auth",
+    message: "Gateway 认证方式",
     options: [
-      { value: "token", label: "Token (recommended)" },
-      { value: "password", label: "Password" },
-      { value: "off", label: "No auth" },
+      { value: "token", label: "令牌（推荐）" },
+      { value: "password", label: "密码" },
+      { value: "off", label: "不使用认证" },
     ],
   });
 
@@ -169,9 +169,9 @@ export async function promptRemoteGatewayConfig(
       prompter,
       explicitMode: options?.secretInputMode,
       copy: {
-        modeMessage: "How do you want to provide this gateway token?",
-        plaintextLabel: "Enter token now",
-        plaintextHint: "Stores the token directly in OpenClaw config",
+        modeMessage: "你希望如何提供这个 Gateway 令牌？",
+        plaintextLabel: "现在输入令牌",
+        plaintextHint: "将令牌直接保存到 OpenClaw 配置中",
       },
     });
     if (selectedMode === "ref") {
@@ -181,7 +181,7 @@ export async function promptRemoteGatewayConfig(
         prompter,
         preferredEnvVar: "OPENCLAW_GATEWAY_TOKEN",
         copy: {
-          sourceMessage: "Where is this gateway token stored?",
+          sourceMessage: "这个 Gateway 令牌存放在哪里？",
           envVarPlaceholder: "OPENCLAW_GATEWAY_TOKEN",
         },
       });
@@ -191,7 +191,7 @@ export async function promptRemoteGatewayConfig(
         await prompter.text({
           message: "Gateway token",
           initialValue: typeof token === "string" ? token : undefined,
-          validate: (value) => (value?.trim() ? undefined : "Required"),
+          validate: (value) => (value?.trim() ? undefined : "必填"),
         }),
       ).trim();
     }
@@ -201,7 +201,7 @@ export async function promptRemoteGatewayConfig(
       prompter,
       explicitMode: options?.secretInputMode,
       copy: {
-        modeMessage: "How do you want to provide this gateway password?",
+        modeMessage: "你希望如何提供这个 Gateway 密码？",
         plaintextLabel: "Enter password now",
         plaintextHint: "Stores the password directly in OpenClaw config",
       },
@@ -213,7 +213,7 @@ export async function promptRemoteGatewayConfig(
         prompter,
         preferredEnvVar: "OPENCLAW_GATEWAY_PASSWORD",
         copy: {
-          sourceMessage: "Where is this gateway password stored?",
+          sourceMessage: "这个 Gateway 密码存放在哪里？",
           envVarPlaceholder: "OPENCLAW_GATEWAY_PASSWORD",
         },
       });
@@ -223,7 +223,7 @@ export async function promptRemoteGatewayConfig(
         await prompter.text({
           message: "Gateway password",
           initialValue: typeof password === "string" ? password : undefined,
-          validate: (value) => (value?.trim() ? undefined : "Required"),
+          validate: (value) => (value?.trim() ? undefined : "必填"),
         }),
       ).trim();
     }

@@ -24,7 +24,6 @@ import {
 import type { OnboardOptions } from "../commands/onboard-types.js";
 import type { OpenClawConfig } from "../config/config.js";
 import { resolveGatewayService } from "../daemon/service.js";
-import { isSystemdUserServiceAvailable } from "../daemon/systemd.js";
 import { ensureControlUiAssetsBuilt } from "../infra/control-ui-assets.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { restoreTerminalState } from "../terminal/restore.js";
@@ -64,36 +63,20 @@ export async function finalizeOnboardingWizard(
     }
   };
 
-  const systemdAvailable =
-    process.platform === "linux" ? await isSystemdUserServiceAvailable() : true;
-  if (process.platform === "linux" && !systemdAvailable) {
+  if (process.platform === "linux") {
     await prompter.note(
-      "Systemd user services are unavailable. Skipping lingering checks and service install.",
-      "Systemd",
+      "Linux 平台已移除内置开机自启安装，仅保留 macOS 与 Windows。",
+      "Gateway service",
     );
-  }
-
-  if (process.platform === "linux" && systemdAvailable) {
-    const { ensureSystemdUserLingerInteractive } = await import("../commands/systemd-linger.js");
-    await ensureSystemdUserLingerInteractive({
-      runtime,
-      prompter: {
-        confirm: prompter.confirm,
-        note: prompter.note,
-      },
-      reason:
-        "Linux installs use a systemd user service by default. Without lingering, systemd stops the user session on logout/idle and kills the Gateway.",
-      requireConfirm: false,
-    });
   }
 
   const explicitInstallDaemon =
     typeof opts.installDaemon === "boolean" ? opts.installDaemon : undefined;
   let installDaemon: boolean;
-  if (explicitInstallDaemon !== undefined) {
-    installDaemon = explicitInstallDaemon;
-  } else if (process.platform === "linux" && !systemdAvailable) {
+  if (process.platform === "linux") {
     installDaemon = false;
+  } else if (explicitInstallDaemon !== undefined) {
+    installDaemon = explicitInstallDaemon;
   } else if (flow === "quickstart") {
     installDaemon = true;
   } else {
@@ -101,14 +84,6 @@ export async function finalizeOnboardingWizard(
       message: "Install Gateway service (recommended)",
       initialValue: true,
     });
-  }
-
-  if (process.platform === "linux" && !systemdAvailable && installDaemon) {
-    await prompter.note(
-      "Systemd user services are unavailable; skipping service install. Use your container supervisor or `docker compose up -d`.",
-      "Gateway service",
-    );
-    installDaemon = false;
   }
 
   if (installDaemon) {
@@ -122,8 +97,8 @@ export async function finalizeOnboardingWizard(
           });
     if (flow === "quickstart") {
       await prompter.note(
-        "QuickStart uses Node for the Gateway service (stable + supported).",
-        "Gateway service runtime",
+        "快速开始模式会使用 Node 作为 Gateway 服务运行时（稳定且受支持）。",
+        "Gateway 服务运行时",
       );
     }
     const service = resolveGatewayService();
@@ -288,7 +263,7 @@ export async function finalizeOnboardingWizard(
           "Could not resolve gateway.auth.password SecretRef for onboarding auth.",
           error instanceof Error ? error.message : String(error),
         ].join("\n"),
-        "Gateway auth",
+        "Gateway 认证",
       );
     }
   }
@@ -299,8 +274,8 @@ export async function finalizeOnboardingWizard(
     password: settings.authMode === "password" ? resolvedGatewayPassword : "",
   });
   const gatewayStatusLine = gatewayProbe.ok
-    ? "Gateway: reachable"
-    : `Gateway: not detected${gatewayProbe.detail ? ` (${gatewayProbe.detail})` : ""}`;
+    ? "Gateway：可达"
+    : `Gateway：未检测到${gatewayProbe.detail ? `（${gatewayProbe.detail}）` : ""}`;
   const bootstrapPath = path.join(
     resolveUserPath(options.workspaceDir),
     DEFAULT_BOOTSTRAP_FILENAME,
@@ -335,10 +310,10 @@ export async function finalizeOnboardingWizard(
     if (hasBootstrap) {
       await prompter.note(
         [
-          "This is the defining action that makes your agent you.",
-          "Please take your time.",
-          "The more you tell it, the better the experience will be.",
-          'We will send: "Wake up, my friend!"',
+          "这是让助手贴近你风格的关键一步。",
+          "你可以慢慢来。",
+          "告诉它越多，后续体验通常会更好。",
+          "将发送示例消息：“你好呀，准备好开始了吗？”",
         ].join("\n"),
         "Start TUI (best option!)",
       );
@@ -346,23 +321,23 @@ export async function finalizeOnboardingWizard(
 
     await prompter.note(
       [
-        "Gateway token: shared auth for the Gateway + Control UI.",
+        "Gateway 令牌：Gateway 与 Control UI 共用的认证凭据。",
         "Stored in: ~/.openclaw/openclaw.json (gateway.auth.token) or OPENCLAW_GATEWAY_TOKEN.",
         `View token: ${formatCliCommand("openclaw config get gateway.auth.token")}`,
         `Generate token: ${formatCliCommand("openclaw doctor --generate-gateway-token")}`,
-        "Web UI keeps dashboard URL tokens in memory for the current tab and strips them from the URL after load.",
+        "Web UI 会把仪表盘 URL 令牌仅保存在当前标签页内存中，并在加载后从 URL 中移除。",
         `Open the dashboard anytime: ${formatCliCommand("openclaw dashboard --no-open")}`,
-        "If prompted: paste the token into Control UI settings (or use the tokenized dashboard URL).",
+        "如有提示：将令牌粘贴到 Control UI 设置中（或使用带令牌的仪表盘 URL）。",
       ].join("\n"),
-      "Token",
+      "令牌",
     );
 
     hatchChoice = await prompter.select({
-      message: "How do you want to hatch your bot?",
+      message: "你希望如何启动你的助手？",
       options: [
-        { value: "tui", label: "Hatch in TUI (recommended)" },
-        { value: "web", label: "Open the Web UI" },
-        { value: "later", label: "Do this later" },
+        { value: "tui", label: "在 TUI 中启动（推荐）" },
+        { value: "web", label: "打开 Web UI" },
+        { value: "later", label: "稍后再做" },
       ],
       initialValue: "tui",
     });
@@ -375,7 +350,7 @@ export async function finalizeOnboardingWizard(
         password: settings.authMode === "password" ? resolvedGatewayPassword : "",
         // Safety: onboarding TUI should not auto-deliver to lastProvider/lastTo.
         deliver: false,
-        message: hasBootstrap ? "Wake up, my friend!" : undefined,
+        message: hasBootstrap ? "你好呀，准备好开始了吗？" : undefined,
       });
       launchedTui = true;
     } else if (hatchChoice === "web") {
@@ -400,8 +375,8 @@ export async function finalizeOnboardingWizard(
         [
           `Dashboard link (with token): ${authedUrl}`,
           controlUiOpened
-            ? "Opened in your browser. Keep that tab to control OpenClaw."
-            : "Copy/paste this URL in a browser on this machine to control OpenClaw.",
+            ? "已在浏览器打开。保留该标签页即可管理 OpenClaw。"
+            : "请在本机浏览器打开此 URL 以管理 OpenClaw。",
           controlUiOpenHint,
         ]
           .filter(Boolean)
@@ -415,7 +390,7 @@ export async function finalizeOnboardingWizard(
       );
     }
   } else if (opts.skipUi) {
-    await prompter.note("Skipping Control UI/TUI prompts.", "Control UI");
+    await prompter.note("已跳过 Control UI/TUI 提示。", "Control UI");
   }
 
   await prompter.note(
@@ -461,8 +436,8 @@ export async function finalizeOnboardingWizard(
       [
         `Dashboard link (with token): ${authedUrl}`,
         controlUiOpened
-          ? "Opened in your browser. Keep that tab to control OpenClaw."
-          : "Copy/paste this URL in a browser on this machine to control OpenClaw.",
+          ? "已在浏览器打开。保留该标签页即可管理 OpenClaw。"
+          : "请在本机浏览器打开此 URL 以管理 OpenClaw。",
         controlUiOpenHint,
       ]
         .filter(Boolean)
@@ -559,10 +534,10 @@ export async function finalizeOnboardingWizard(
 
   await prompter.outro(
     controlUiOpened
-      ? "Onboarding complete. Dashboard opened; keep that tab to control OpenClaw."
+      ? "引导完成。仪表盘已打开，保留该标签页即可管理 OpenClaw。"
       : seededInBackground
         ? "Onboarding complete. Web UI seeded in the background; open it anytime with the dashboard link above."
-        : "Onboarding complete. Use the dashboard link above to control OpenClaw.",
+        : "引导完成。可使用上方仪表盘链接管理 OpenClaw。",
   );
 
   return { launchedTui };

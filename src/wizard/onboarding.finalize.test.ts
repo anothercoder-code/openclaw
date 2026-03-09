@@ -122,7 +122,7 @@ describe("finalizeOnboardingWizard", () => {
     const previous = process.env.OPENCLAW_GATEWAY_PASSWORD;
     process.env.OPENCLAW_GATEWAY_PASSWORD = "resolved-gateway-password"; // pragma: allowlist secret
     const select = vi.fn(async (params: { message: string }) => {
-      if (params.message === "How do you want to hatch your bot?") {
+      if (params.message === "你希望如何启动你的助手？") {
         return "tui";
       }
       return "later";
@@ -239,9 +239,15 @@ describe("finalizeOnboardingWizard", () => {
       runtime,
     });
 
-    expect(resolveGatewayInstallToken).toHaveBeenCalledTimes(1);
-    expect(buildGatewayInstallPlan).toHaveBeenCalledTimes(1);
-    expectFirstOnboardingInstallPlanCallOmitsToken();
-    expect(gatewayServiceInstall).toHaveBeenCalledTimes(1);
+    if (process.platform === "linux") {
+      expect(resolveGatewayInstallToken).not.toHaveBeenCalled();
+      expect(buildGatewayInstallPlan).not.toHaveBeenCalled();
+      expect(gatewayServiceInstall).not.toHaveBeenCalled();
+    } else {
+      expect(resolveGatewayInstallToken).toHaveBeenCalledTimes(1);
+      expect(buildGatewayInstallPlan).toHaveBeenCalledTimes(1);
+      expectFirstOnboardingInstallPlanCallOmitsToken();
+      expect(gatewayServiceInstall).toHaveBeenCalledTimes(1);
+    }
   });
 });

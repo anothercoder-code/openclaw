@@ -40,7 +40,7 @@ const finalizeOnboardingWizard = vi.hoisted(() =>
     }
 
     const hatch = await options.prompter.select({
-      message: "How do you want to hatch your bot?",
+      message: "你希望如何启动你的助手？",
       options: [],
     });
     if (hatch !== "tui") {
@@ -50,7 +50,7 @@ const finalizeOnboardingWizard = vi.hoisted(() =>
     let message: string | undefined;
     try {
       await fs.stat(path.join(options.workspaceDir, DEFAULT_BOOTSTRAP_FILENAME));
-      message = "Wake up, my friend!";
+      message = "你好呀，准备好开始了吗？";
     } catch {
       message = undefined;
     }
@@ -319,7 +319,7 @@ describe("runOnboardingWizard", () => {
     }
 
     const select = vi.fn(async (opts: WizardSelectParams<unknown>) => {
-      if (opts.message === "How do you want to hatch your bot?") {
+      if (opts.message === "你希望如何启动你的助手？") {
         return "tui";
       }
       return "quickstart";
@@ -354,7 +354,10 @@ describe("runOnboardingWizard", () => {
   }
 
   it("launches TUI without auto-delivery when hatching", async () => {
-    await runTuiHatchTest({ writeBootstrapFile: true, expectedMessage: "Wake up, my friend!" });
+    await runTuiHatchTest({
+      writeBootstrapFile: true,
+      expectedMessage: "你好呀，准备好开始了吗？",
+    });
   });
 
   it("offers TUI hatch even without BOOTSTRAP.md", async () => {
