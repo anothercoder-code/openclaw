@@ -14,12 +14,8 @@ Already followed [Getting Started](/start/getting-started)? You're all set — t
 ## System requirements
 
 - **[Node 22+](/install/node)** (the [installer script](#install-methods) will install it if missing)
-- macOS, Linux, or Windows
+- Windows
 - `pnpm` only if you build from source
-
-<Note>
-On Windows, we strongly recommend running OpenClaw under [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install).
-</Note>
 
 ## Install methods
 
@@ -35,35 +31,17 @@ For VPS/cloud hosts, avoid third-party "1-click" marketplace images when possibl
   <Accordion title="Installer script" icon="rocket" defaultOpen>
     Downloads the CLI, installs it globally via npm, and launches the onboarding wizard.
 
-    <Tabs>
-      <Tab title="macOS / Linux / WSL2">
-        ```bash
-        curl -fsSL https://openclaw.ai/install.sh | bash
-        ```
-      </Tab>
-      <Tab title="Windows (PowerShell)">
-        ```powershell
-        iwr -useb https://openclaw.ai/install.ps1 | iex
-        ```
-      </Tab>
-    </Tabs>
+    ```powershell
+    iwr -useb https://openclaw.ai/install.ps1 | iex
+    ```
 
     That's it — the script handles Node detection, installation, and onboarding.
 
     To skip onboarding and just install the binary:
 
-    <Tabs>
-      <Tab title="macOS / Linux / WSL2">
-        ```bash
-        curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
-        ```
-      </Tab>
-      <Tab title="Windows (PowerShell)">
-        ```powershell
-        & ([scriptblock]::Create((iwr -useb https://openclaw.ai/install.ps1))) -NoOnboard
-        ```
-      </Tab>
-    </Tabs>
+    ```powershell
+    & ([scriptblock]::Create((iwr -useb https://openclaw.ai/install.ps1))) -NoOnboard
+    ```
 
     For all flags, env vars, and CI/automation options, see [Installer internals](/install/installer).
 
@@ -190,17 +168,9 @@ npm prefix -g
 echo "$PATH"
 ```
 
-If `$(npm prefix -g)/bin` (macOS/Linux) or `$(npm prefix -g)` (Windows) is **not** in your `$PATH`, your shell can't find global npm binaries (including `openclaw`).
+If `$(npm prefix -g)` is **not** in your PATH, your shell can't find global npm binaries (including `openclaw`).
 
-Fix — add it to your shell startup file (`~/.zshrc` or `~/.bashrc`):
-
-```bash
-export PATH="$(npm prefix -g)/bin:$PATH"
-```
-
-On Windows, add the output of `npm prefix -g` to your PATH.
-
-Then open a new terminal (or `rehash` in zsh / `hash -r` in bash).
+Fix — add the output of `npm prefix -g` to your user PATH and then open a new terminal.
 </Accordion>
 
 ## Update / uninstall

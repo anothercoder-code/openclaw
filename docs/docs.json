@@ -784,10 +784,6 @@
       "destination": "/install/gcp"
     },
     {
-      "source": "/platforms/macos-vm",
-      "destination": "/install/macos-vm"
-    },
-    {
       "source": "/platforms/exe-dev",
       "destination": "/install/exe-dev"
     },
@@ -875,7 +871,6 @@
                   "install/fly",
                   "install/hetzner",
                   "install/gcp",
-                  "install/macos-vm",
                   "install/exe-dev",
                   "install/railway",
                   "install/render",
@@ -1475,7 +1470,6 @@
                   "zh-CN/install/fly",
                   "zh-CN/install/hetzner",
                   "zh-CN/install/gcp",
-                  "zh-CN/install/macos-vm",
                   "zh-CN/install/exe-dev",
                   "zh-CN/install/railway",
                   "zh-CN/install/render",
