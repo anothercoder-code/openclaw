@@ -115,7 +115,7 @@ async function loadTemplate(name: string): Promise<string> {
       return stripFrontMatter(content);
     } catch {
       throw new Error(
-        `Missing workspace template: ${name} (${templatePath}). Ensure docs/reference/templates are packaged.`,
+        `缺少工作区模板：${name}（${templatePath}）。请确认 docs/reference/templates 已被打包。`,
       );
     }
   })();
