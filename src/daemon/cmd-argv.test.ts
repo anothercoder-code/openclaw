@@ -12,7 +12,7 @@ describe("cmd argv helpers", () => {
     "safe^caret",
     "%TEMP%",
     "!token!",
-    'he said "hi"',
+    'she said "hi"',
   ])("round-trips single arg: %p", (arg) => {
     const encoded = quoteCmdScriptArg(arg);
     expect(parseCmdScriptCommandLine(encoded)).toEqual([arg]);
@@ -29,7 +29,7 @@ describe("cmd argv helpers", () => {
       "--bang",
       "!token!",
       "--quoted",
-      'he said "hi"',
+      'she said "hi"',
     ];
     const encoded = args.map(quoteCmdScriptArg).join(" ");
     expect(parseCmdScriptCommandLine(encoded)).toEqual(args);

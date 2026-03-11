@@ -26,7 +26,7 @@ const STOP_WORDS_EN = new Set([
   "our",
   "you",
   "your",
-  "he",
+  "she",
   "she",
   "it",
   "they",

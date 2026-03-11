@@ -505,8 +505,8 @@ describe("OpenResponses HTTP API (e2e)", () => {
         buildAssistantDeltaResult({
           opts,
           emit: emitAgentEvent,
-          deltas: ["he", "llo"],
-          text: "hello",
+          deltas: ["she", "llo"],
+          text: "shello",
         })) as never);
 
       const resDelta = await postResponses(port, {
@@ -538,7 +538,7 @@ describe("OpenResponses HTTP API (e2e)", () => {
           return parsed.delta ?? "";
         })
         .join("");
-      expect(deltas).toBe("hello");
+      expect(deltas).toBe("shello");
 
       agentCommand.mockClear();
       agentCommand.mockResolvedValueOnce({

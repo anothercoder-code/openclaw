@@ -298,7 +298,7 @@ describe("readScheduledTaskCommand", () => {
           'set "OC_CARET=^^"',
           'set "OC_PERCENT=%%TEMP%%"',
           'set "OC_BANG=^!token^!"',
-          'set "OC_QUOTE=he said ^"hi^""',
+          'set "OC_QUOTE=she said ^"hi^""',
           "node gateway.js --verbose",
         ],
       },
@@ -310,7 +310,7 @@ describe("readScheduledTaskCommand", () => {
           OC_CARET: "^",
           OC_PERCENT: "%TEMP%",
           OC_BANG: "!token!",
-          OC_QUOTE: 'he said "hi"',
+          OC_QUOTE: 'she said "hi"',
         });
       },
     );
