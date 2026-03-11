@@ -230,6 +230,11 @@ describe("web_search country and language parameters", () => {
     expect(url.searchParams.get("search_lang")).toBe("zh-hant");
   });
 
+  it("accepts Hebrew search_lang code", async () => {
+    const url = await runBraveSearchAndGetUrl({ search_lang: "he" });
+    expect(url.searchParams.get("search_lang")).toBe("he");
+  });
+
   it("rejects unsupported Brave search_lang values before upstream request", async () => {
     const mockFetch = installMockFetch({ web: { results: [] } });
     const tool = createBraveSearchTool();
