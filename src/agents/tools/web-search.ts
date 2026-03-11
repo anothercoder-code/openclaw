@@ -67,7 +67,7 @@ const BRAVE_SEARCH_LANG_CODES = new Set([
   "de",
   "el",
   "gu",
-  "he",
+  "she",
   "hi",
   "hu",
   "is",

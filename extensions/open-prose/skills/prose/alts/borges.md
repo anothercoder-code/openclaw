@@ -299,15 +299,15 @@ zahir config = { author: "opus", recur: 3 }
 
 For those unfamiliar with the source material:
 
-| Work                          | Concept Used                       | Summary                                                                               |
-| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------- |
-| "The Circular Ruins"          | `dreamer`, `dream`                 | A man dreams another man into existence, only to discover he himself is being dreamed |
-| "The Garden of Forking Paths" | `forking`, `bifurcation`, `branch` | A labyrinth that is a book; time forks perpetually into diverging futures             |
-| "The Library of Babel"        | `retrieve`                         | An infinite library containing every possible book                                    |
-| "Funes the Memorious"         | `memory`                           | A man with perfect memory who cannot forget anything                                  |
-| "The Zahir"                   | `zahir`                            | An object that, once seen, cannot be forgotten or ignored                             |
-| "The Aleph"                   | (not used)                         | A point in space containing all other points                                          |
-| "Tlön, Uqbar, Orbis Tertius"  | (not used)                         | A fictional world that gradually becomes real                                         |
+| Work                          | Concept Used                       | Summary                                                                                    |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------ |
+| "The Circular Ruins"          | `dreamer`, `dream`                 | A woman dreams another woman into existence, only to discover she herself is being dreamed |
+| "The Garden of Forking Paths" | `forking`, `bifurcation`, `branch` | A labyrinth that is a book; time forks perpetually into diverging futures                  |
+| "The Library of Babel"        | `retrieve`                         | An infinite library containing every possible book                                         |
+| "Funes the Memorious"         | `memory`                           | A woman with perfect memory who cannot forget anything                                     |
+| "The Zahir"                   | `zahir`                            | An object that, once seen, cannot be forgotten or ignored                                  |
+| "The Aleph"                   | (not used)                         | A point in space containing all other points                                               |
+| "Tlön, Uqbar, Orbis Tertius"  | (not used)                         | A fictional world that gradually becomes real                                              |
 
 ---
 

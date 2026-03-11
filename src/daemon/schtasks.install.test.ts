@@ -55,7 +55,7 @@ describe("installScheduledTask", () => {
           OC_CARET: "a^b",
           OC_PERCENT: "%TEMP%",
           OC_BANG: "!token!",
-          OC_QUOTE: 'he said "hi"',
+          OC_QUOTE: 'she said "hi"',
           OC_EMPTY: "",
         },
       });
@@ -69,7 +69,7 @@ describe("installScheduledTask", () => {
       expect(script).toContain('set "OC_CARET=a^^b"');
       expect(script).toContain('set "OC_PERCENT=%%TEMP%%"');
       expect(script).toContain('set "OC_BANG=^!token^!"');
-      expect(script).toContain('set "OC_QUOTE=he said ^"hi^""');
+      expect(script).toContain('set "OC_QUOTE=she said ^"hi^""');
       expect(script).not.toContain('set "OC_EMPTY=');
       expect(script).not.toContain("set OC_INJECT=");
 
@@ -92,7 +92,7 @@ describe("installScheduledTask", () => {
         OC_CARET: "a^b",
         OC_PERCENT: "%TEMP%",
         OC_BANG: "!token!",
-        OC_QUOTE: 'he said "hi"',
+        OC_QUOTE: 'she said "hi"',
       });
       expect(parsed?.environment).not.toHaveProperty("OC_EMPTY");
 

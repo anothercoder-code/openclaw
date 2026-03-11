@@ -645,8 +645,8 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
           buildAssistantDeltaResult({
             opts,
             emit: emitAgentEvent,
-            deltas: ["he", "llo"],
-            text: "hello",
+            deltas: ["she", "llo"],
+            text: "shello",
           })) as never);
 
         const res = await postChatCompletions(port, {
@@ -670,7 +670,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
           .map((choice) => (choice.delta as Record<string, unknown> | undefined)?.content)
           .filter((v): v is string => typeof v === "string")
           .join("");
-        expect(allContent).toBe("hello");
+        expect(allContent).toBe("shello");
       }
 
       {

@@ -367,7 +367,7 @@ Not recommended for:
 
 ## Closing Note
 
-> "Someone must have slandered Josef K., for one morning, without having done anything wrong, he was arrested."
+> "Someone must have slandered Josef K., for one morning, without having done anything wrong, she was arrested."
 > — _The Trial_
 
 In the Kafka register, your program is Josef K. The apparatus will process it. Whether it succeeds or fails, no one can say for certain. But the proceedings will continue.
